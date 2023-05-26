@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>PBuddy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <!-- animate__backInDown -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"
+    ></script>
+    <style>
+      :root {
+        --animate-duration: 2000ms;
+        --animate-delay: 1s;
+      }
+      body {
+        background-color: rgb(2, 34, 79);
+        font-family: "Poppins", sans-serif;
+        color: white;
+      }
+      .card {
+        background-color: azure;
+        color: rgb(2, 64, 79);
+      }
+      #excel_data {
+        color: white;
+      }
+      #company_name {
+        color: white;
+        margin-top: 20px;
+
+        text-align: center;
+      }
+      .show_percent {
+        align-self: center;
+        /* background-color: blanchedalmond; */
+      }
+      tr {
+        border: 2px solid white;
+      }
+      td {
+        border-right: 2px solid white;
+        padding: 10px;
+        width: 700px;
+      }
+      th {
+        border-right: 2px solid white;
+        padding: 10px;
+        text-align: center;
+        font-size: 25px;
+        width: 700px;
+      }
+      .percent_table {
+        display: flex;
+        justify-content: center;
+        background-color: rgb(51, 129, 153);
+      }
+      header {
+        background-color: rgb(51, 129, 153);
+        padding-top: 2px;
+        padding-bottom: 2px;
+      }
+      .image {
+        /* background-color: yellow; */
+        display: flex;
+        justify-content: center;
+        padding: 10px;
+        flex-direction: column;
+        text-align: center;
+      }
+      span {
+        padding-top: 20px;
+        text-align: center;
+        font-size: 25px;
+        font-weight: 200;
+      }
+      .image h1 {
+        margin-top: 30px;
+        font-style: oblique;
+        font-weight: 700;
+      }
+      img {
+        background-color: rgb(198, 200, 200);
+        align-self: center;
+        border-radius: 5px;
+        height: 400px;
+      }
+      #ans {
+        color: white;
+        background-color: rgb(51, 129, 153);
+        display: block;
+        padding: 5px 20px;
+        border-radius: 5px;
+        font-size: 24px;
+        width: auto;
+       
+        /* background-color: blanchedalmond; */
+      }
+      #ans:hover
+      {
+        animation: animate__bounceIn;
+      }
+      .animate__animated.animate__bounceIn {
+        --animate-duration: 1s;
+        transition: ease-in-out;
+      }
+      .animate__animated.animate__tada {
+        --animate-duration: 2s;
+        --animate-delay: 2s;
+        transition: ease-in-out;
+      }
+      #excel_file {
+        display: none;
+      }
+      label {
+        /* background-color: rgb(51, 129, 153); */
+        color: rgb(51, 129, 153);
+        padding: 5px 10px;
+        border-radius: 5px;
+        border: 2px solid rgb(51, 129, 153);
+        cursor: pointer;
+        font-size: 25px;
+        font-weight: 500;
+      }
+      label:hover {
+        background-color: rgb(51, 129, 153);
+        color: white;
+      }
+      
+      /* .ans_p:hover
+      {
+        font-size: 29px;
+        animation: animate__jackInTheBox;
+      } */
+    </style>
+  </head>
+  <body>
+    <!-- <header>
+      <h2 class="text-center mt-4 mb-4 animate__animated animate__backInUp">Placement Buddy</h2>
+    </header> -->
+    <br />
+    <div class="container">
+      <div class="image">
+        <img src="./pbuddy.svg" alt="PBuddy" class="animate__animated animate__fadeInDown"/>
+       
+        <h1 class="animate__animated animate__backInLeft">
+          Placement Buddy
+          
+        </h1>
+        <span class="animate__animated animate__tada">Your trusty sidekick in the journey towards acing technical interviews!</span>
+      </div>
+      <br /><br /><br />
+
+      <div class="card">
+        <div class="card-header"><b>Select Excel File</b></div>
+
+        <div class="card-body">
+          <label for="excel_file">
+            Select File
+            <input type="file" id="excel_file" />
+          </label>
+        </div>
+      </div>
+      <h1 id="company_name"></h1>
+      <div id="excel_data" class="mt-5"></div>
+      <div class="show_percent">
+        <h2>Number Of Questions Appeared in Each Topic</h2>
+        <br />
+        <div class="percent_table">
+          <table>
+            <tr>
+              <th>Topics</th>
+              <th>Count</th>
+            </tr>
+            <tr>
+              <td>Computer Networks</td>
+              <td id="cn"></td>
+            </tr>
+            <tr>
+              <td>Operating Systems</td>
+              <td id="os"></td>
+            </tr>
+            <tr>
+              <td>Database Systems</td>
+              <td id="dbms"></td>
+            </tr>
+            <tr>
+              <td>C++ Programming</td>
+              <td id="cpp"></td>
+            </tr>
+            <tr>
+              <td>JAVA Programming</td>
+              <td id="java"></td>
+            </tr>
+          </table>
+        </div>
+        <br /><br />
+        <div class="decision">
+          <h3 id="tell">-</h3>
+          <br />
+          <p id="ans" class="animate__animated animate__bounceIn ">None</p>
+          <br /><br />
+          <p>Be prepared buddy!</p>
+        </div>
+        <br /><br />
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  const excel_file = document.getElementById("excel_file");
+
+  excel_file.addEventListener("change", (event) => {
+    if (
+      ![
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "application/vnd.ms-excel",
+      ].includes(event.target.files[0].type)
+    ) {
+      document.getElementById("excel_data").innerHTML =
+        '<div class="alert alert-danger">Only .xlsx or .xls file format are allowed</div>';
+
+      excel_file.value = "";
+
+      return false;
+    }
+
+    var reader = new FileReader();
+
+    reader.readAsArrayBuffer(event.target.files[0]);
+
+    reader.onload = function (event) {
+      var data = new Uint8Array(reader.result);
+      var work_book = XLSX.read(data, { type: "array" });
+      var sheet_name = work_book.SheetNames;
+      var sheet_data = XLSX.utils.sheet_to_json(
+        work_book.Sheets[sheet_name[0]],
+        { header: 1 }
+      );
+      let companyName = sheet_data[1][4];
+      document.getElementById("tell").innerHTML = `Most asked question in ${companyName} are from topic : `;
+      console.log(sheet_data[1][2])
+      document.getElementById("company_name").innerHTML = sheet_data[1][4];
+      var cn = sheet_data[1][5];
+      var os = sheet_data[1][6];
+      var dbms = sheet_data[1][7];
+      var cpp = sheet_data[1][8];
+      var java = sheet_data[1][9];
+
+      document.getElementById("cn").innerHTML = cn;
+      document.getElementById("os").innerHTML = os;
+      document.getElementById("dbms").innerHTML = dbms;
+      document.getElementById("cpp").innerHTML = cpp;
+      document.getElementById("java").innerHTML = java;
+
+      var list = [
+        [cn, "Computer Networks"],
+        [os, "Operating Systems"],
+        [dbms, "Database Systems"],
+        [cpp, "C++ Programming"],
+        [java, "Java Programming"],
+      ];
+      var max = 0;
+      var topic = "";
+      for (let i = 0; i < list.length; i++) {
+        if (list[i][0] > max) {
+          max = list[i][0];
+          topic = list[i][1];
+        }
+      }
+
+      document.getElementById("ans").innerHTML = topic;
+
+      if (sheet_data.length > 0) {
+        var table_output = '<table class="table table-striped table-bordered">';
+        // sheet_data.length
+        for (var row = 0; row < sheet_data.length; row++) {
+          table_output += "<tr>";
+          for (var cell = 0; cell < 4; cell++) {
+            if (row == 0) {
+              table_output += "<th>" + sheet_data[row][cell] + "</th>";
+            } else {
+              table_output += "<td>" + sheet_data[row][cell] + "</td>";
+            }
+          }
+          table_output += "</tr>";
+        }
+        table_output += "</table>";
+        document.getElementById("excel_data").innerHTML = table_output;
+      }
+
+      excel_file.value = "";
+    };
+  });
+</script>
